@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 
-class AppBottom extends StatelessWidget {
+class AppButton extends StatelessWidget {
   String text;
 
   Function onPressed;
   bool showProgress;
+  Color color;
+  double marginTop;
 
-  AppBottom(this.text, {this.onPressed, this.showProgress = false});
+  AppButton(
+    this.text, {
+    this.onPressed,
+    this.showProgress = false,
+    this.color = Colors.blue,
+    this.marginTop=0,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 46,
+      margin: EdgeInsets.only(top: marginTop),
       child: RaisedButton(
-        color: Colors.blue,
+        color: color,
         child: showProgress
             ? Center(
                 child: CircularProgressIndicator(

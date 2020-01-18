@@ -10,6 +10,9 @@ class AppText extends StatelessWidget {
   TextInputAction textInputAction;
   FocusNode focusNode;
   FocusNode nextFocus;
+  Color colorText;
+  Color colorLabel;
+  bool noBorder;
 
   AppText(
     this.label,
@@ -21,6 +24,9 @@ class AppText extends StatelessWidget {
     this.textInputAction,
     this.focusNode,
     this.nextFocus,
+    this.colorText = Colors.blue,
+    this.colorLabel = Colors.grey,
+    this.noBorder = false,
   });
 
   @override
@@ -39,16 +45,16 @@ class AppText extends StatelessWidget {
       },
       style: TextStyle(
         fontSize: 25,
-        color: Colors.blue,
+        color: colorText,
       ),
       decoration: InputDecoration(
-          border: OutlineInputBorder(
+          border: noBorder ? InputBorder.none : OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           labelText: label,
           labelStyle: TextStyle(
             fontSize: 25,
-            color: Colors.grey,
+            color: colorLabel,
           ),
           hintText: hint,
           hintStyle: TextStyle(

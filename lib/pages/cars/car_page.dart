@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/pages/cars/car.dart';
+import 'package:carros/pages/cars/car_form_page.dart';
 import 'package:carros/pages/cars/loripsum.dart';
 import 'package:carros/pages/favorites/favorite_service.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/widget/text.dart';
 import 'package:flutter/material.dart';
 
@@ -17,11 +19,19 @@ class CarPage extends StatefulWidget {
 class _CarPageState extends State<CarPage> {
   final _loripsumBloc = LoripsumBloc();
 
+  Color color = Colors.grey;
+
   Car get car => widget.car;
 
   @override
   void initState() {
     super.initState();
+
+    FavoriteService.isFavorite(car).then((bool isFavorite) {
+      setState(() {
+        color = isFavorite ? Colors.red : Colors.grey;
+      });
+    });
 
     _loripsumBloc.fetch();
   }
@@ -95,7 +105,7 @@ class _CarPageState extends State<CarPage> {
             IconButton(
               icon: Icon(
                 Icons.favorite,
-                color: Colors.red,
+                color: color,
                 size: 40,
               ),
               onPressed: _onClickFovorite,
@@ -142,7 +152,7 @@ class _CarPageState extends State<CarPage> {
   _onClickPopupMenu(value) {
     switch (value) {
       case "edit":
-        print("Editar");
+        push(context, CarFormPage(car: car));
         break;
       case "delete":
         print("Apagar");
@@ -154,7 +164,11 @@ class _CarPageState extends State<CarPage> {
   }
 
   void _onClickFovorite() async {
-    FavoriteService.favorite(car);
+    bool isFavorite = await FavoriteService.favorite(car);
+
+    setState(() {
+      color = isFavorite ? Colors.red : Colors.grey;
+    });
   }
 
   void _onClickShare() {}

@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
               stream: _bloc.stream,
               initialData: false,
               builder: (context, snapshot) {
-                return AppBottom(
+                return AppButton(
                   "Login",
                   onPressed: _onClickLogin,
                   showProgress: snapshot.data,

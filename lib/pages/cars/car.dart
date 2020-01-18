@@ -23,10 +23,10 @@ class Car extends Entity {
 
   Car.fromMap(Map<String, dynamic> map) {
     id = map['id'];
-    name = map['nome'];
-    type = map['tipo'];
-    description = map['descricao'];
-    urlPhoto = map['urlFoto'];
+    name = map['nome'] ?? map['name'];
+    type = map['tipo'] ?? map['type'];
+    description = map['descricao'] ?? map['description'];
+    urlPhoto = map['urlFoto'] ?? map['urlPhoto'];
     urlVideo = map['urlVideo'];
     latitude = map['latitude'];
     longitude = map['longitude'];
@@ -43,5 +43,10 @@ class Car extends Entity {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Car{id: $id, name: $name, type: $type, description: $description}';
   }
 }

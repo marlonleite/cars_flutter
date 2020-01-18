@@ -42,19 +42,22 @@ class CarsListView extends StatelessWidget {
                     "descrição...",
                     style: TextStyle(fontSize: 16),
                   ),
-                  ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: const Text('DETALHE'),
-                        onPressed: () => _onClickCar(context, car),
-                      ),
-                      FlatButton(
-                        child: const Text('COMPARTILHAR'),
-                        onPressed: () {
-                          /* ... */
-                        },
-                      ),
-                    ],
+                  ButtonBarTheme(
+                    data: ButtonBarThemeData(),
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: const Text('DETALHE'),
+                          onPressed: () => _onClickCar(context, car),
+                        ),
+                        FlatButton(
+                          child: const Text('COMPARTILHAR'),
+                          onPressed: () {
+                            /* ... */
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

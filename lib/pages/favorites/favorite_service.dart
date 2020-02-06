@@ -1,10 +1,13 @@
-import 'package:carros/pages/cars/car_dao.dart';
+
 import 'package:carros/pages/cars/car.dart';
+import 'package:carros/pages/cars/car_dao.dart';
 import 'package:carros/pages/favorites/favorite-dao.dart';
 import 'package:carros/pages/favorites/favorite.dart';
+import 'package:carros/pages/favorites/favorites_model.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteService {
-  static Future<bool> favorite(Car c) async {
+  static Future<bool> favorite(context, Car c) async {
     Favorite f = Favorite.fromCar(c);
 
     final dao = FavoriteDAO();
@@ -14,9 +17,13 @@ class FavoriteService {
     if (exists) {
       dao.delete(c.id);
 
+      Provider.of<FavoritesModel>(context, listen: false).getCars();
+
       return false;
     } else {
       dao.save(f);
+
+      Provider.of<FavoritesModel>(context, listen: false).getCars();
 
       return true;
     }

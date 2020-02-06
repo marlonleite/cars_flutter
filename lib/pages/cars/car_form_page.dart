@@ -1,10 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carros/pages/cars/car.dart';
-import 'package:carros/widget/app_button.dart';
-import 'package:carros/widget/app_text.dart';
+import 'dart:io';
 
+import 'package:carros/pages/api_response.dart';
+import 'package:carros/pages/cars/car.dart';
+import 'package:carros/pages/cars/car_api.dart';
+import 'package:carros/utils/alert.dart';
+import 'package:carros/utils/event_bus.dart';
+import 'package:carros/widget/app_button.dart';
+import 'package:carros/widget/app_image.dart';
+import 'package:carros/widget/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarFormPage extends StatefulWidget {
   final Car car;
@@ -27,6 +33,8 @@ class _CarFormPageState extends State<CarFormPage> {
   int _radioIndex = 0;
 
   var _showProgress = false;
+
+  File _file;
 
   Car get car => widget.car;
 
@@ -73,7 +81,7 @@ class _CarFormPageState extends State<CarFormPage> {
         children: <Widget>[
           _headerPhoto(),
           Text(
-            "Clique na imagem para tirar uma foto",
+            "Clique na imagem para selecionar uma foto",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -121,14 +129,20 @@ class _CarFormPageState extends State<CarFormPage> {
   }
 
   _headerPhoto() {
-    return car != null
-        ? CachedNetworkImage(
-            imageUrl: car.urlPhoto,
-          )
-        : Image.asset(
-            "assets/images/camera.jpg",
-            height: 150,
-          );
+    return InkWell(
+      onTap: _onClickPhoto,
+      child: _file != null
+          ? Image.file(
+              _file,
+              height: 150,
+            )
+          : car != null
+              ? AppImage(car.urlPhoto)
+              : Image.asset(
+                  "assets/images/camera.png",
+                  height: 150,
+                ),
+    );
   }
 
   _radioType() {
@@ -197,6 +211,15 @@ class _CarFormPageState extends State<CarFormPage> {
     }
   }
 
+  void _onClickPhoto() async {
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      setState(() {
+        this._file = file;
+      });
+    }
+  }
+
   _onClickSave() async {
     if (!_formKey.currentState.validate()) {
       return;
@@ -216,7 +239,17 @@ class _CarFormPageState extends State<CarFormPage> {
 
     print("Salvar o carro $c");
 
-    await Future.delayed(Duration(seconds: 3));
+    ApiResponse<bool> response = await CarApi.save(c, _file);
+
+    if (response.ok) {
+      alert(context, "Carro salvo com sucesso", callback: () {
+        EventBus.get(context).sendEvent(CarEvent("Carro Salvo", c.type));
+
+        Navigator.pop(context);
+      });
+    } else {
+      alert(context, response.msg);
+    }
 
     setState(() {
       _showProgress = false;

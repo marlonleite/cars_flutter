@@ -1,4 +1,20 @@
+import 'dart:convert' as convert;
+
+import 'package:carros/utils/event_bus.dart';
 import 'package:carros/utils/sql/entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class CarEvent extends Event {
+  String action; // Save, delete
+  String type; // classicos, esportivos, luxo
+
+  CarEvent(this.action, this.type);
+
+  @override
+  String toString() {
+    return 'CarEvent{action: $action, type: $type}';
+  }
+}
 
 class Car extends Entity {
   int id;
@@ -9,6 +25,11 @@ class Car extends Entity {
   String urlVideo;
   String latitude;
   String longitude;
+
+  get latlng => LatLng(
+      latitude == null || latitude.isEmpty ? 0.0 : double.parse(latitude),
+      longitude == null || longitude.isEmpty ? 0.0 : double.parse(longitude)
+  );
 
   Car({
     this.id,
@@ -43,6 +64,24 @@ class Car extends Entity {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     return data;
+  }
+
+  Map<String, dynamic> toMapApi() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['nome'] = this.name;
+    data['tipo'] = this.type;
+    data['descricao'] = this.description;
+    data['urlFoto'] = this.urlPhoto;
+    data['urlVideo'] = this.urlVideo;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    return data;
+  }
+
+  String toJson() {
+    String json = convert.json.encode(toMapApi());
+    return json;
   }
 
   @override

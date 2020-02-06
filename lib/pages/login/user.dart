@@ -10,8 +10,14 @@ class User {
   String token;
   List<String> roles;
 
-  User(this.username, this.name, this.email, this.urlPhoto, this.token,
-      this.roles);
+  User({
+    this.username,
+    this.name,
+    this.email,
+    this.urlPhoto,
+    this.token,
+    this.roles,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     username = json['login'];
@@ -19,7 +25,7 @@ class User {
     email = json['email'];
     urlPhoto = json['urlFoto'];
     token = json['token'];
-    roles = json['roles'].cast<String>();
+    roles = json['roles'] != null ? json['roles'].cast<String>() : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +63,4 @@ class User {
   String toString() {
     return 'User{username: $username, name: $name}';
   }
-
-
 }

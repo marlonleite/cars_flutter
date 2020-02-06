@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "925535139011",
+    "firebase_url": "https://cars-f8178.firebaseio.com",
+    "project_id": "cars-f8178",
+    "storage_bucket": "cars-f8178.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925535139011:android:185fdae0291d70b719de76",
+        "android_client_info": {
+          "package_name": "flutter.exemple.com.carros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925535139011-56u6dlo15q1f7bf4849n1ppp30hb50ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "flutter.exemple.com.carros",
+            "certificate_hash": "02d8d0262224eda4542504771437cc5ae07c9d24"
+          }
+        },
+        {
+          "client_id": "925535139011-96i51r0r45qe2nv5eaksk9a70pgplkfh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6QAWZOaESSvWzLO_AIOipY8u72m1wUZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925535139011-96i51r0r45qe2nv5eaksk9a70pgplkfh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

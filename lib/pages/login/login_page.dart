@@ -1,14 +1,16 @@
 import 'dart:async';
 
-import 'package:carros/api_response.dart';
+import 'package:carros/Firebase/firebase_service.dart';
+import 'package:carros/pages/api_response.dart';
+import 'package:carros/pages/cars/home_page.dart';
 import 'package:carros/pages/login/login_bloc.dart';
 import 'package:carros/pages/login/user.dart';
-import 'package:carros/pages/cars/home_page.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widget/app_button.dart';
 import 'package:carros/widget/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,11 +28,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final _bloc = LoginBloc();
 
-
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               nextFocus: _focusPassword,
+              colorText: Colors.deepPurple,
             ),
             SizedBox(
               height: 10,
@@ -70,20 +71,28 @@ class _LoginPageState extends State<LoginPage> {
               validator: _validatePassword,
               keyboardType: TextInputType.number,
               focusNode: _focusPassword,
+              colorText: Colors.deepPurple,
             ),
             SizedBox(
               height: 20,
             ),
             StreamBuilder<bool>(
-              stream: _bloc.stream,
-              initialData: false,
-              builder: (context, snapshot) {
-                return AppButton(
-                  "Login",
-                  onPressed: _onClickLogin,
-                  showProgress: snapshot.data,
-                );
-              }
+                stream: _bloc.stream,
+                initialData: false,
+                builder: (context, snapshot) {
+                  return AppButton(
+                    "Login",
+                    onPressed: _onClickLogin,
+                    showProgress: snapshot.data,
+                    color: Colors.deepPurple,
+                  );
+                }),
+            Container(
+              height: 46,
+              margin: EdgeInsets.only(top: 20),
+              child: GoogleSignInButton(
+                onPressed: _onClickGoogle,
+              ),
             )
           ],
         ),
@@ -112,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       alert(context, response.msg);
     }
-
   }
 
   String _validateLogin(String text) {
@@ -132,11 +140,23 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  void _onClickGoogle() async {
+
+    final service = FirebaseService();
+
+    ApiResponse response = await service.loginGoogle();
+
+    if (response.ok) {
+      push(context, HomePage(), replace: true);
+    } else {
+      alert(context, response.msg);
+    }
+  }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
 
     _bloc.dispose();
-
   }
 }

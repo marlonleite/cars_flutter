@@ -1,8 +1,8 @@
 import 'package:carros/pages/cars/car.dart';
 import 'package:carros/pages/cars/cars_listview.dart';
-import 'package:carros/pages/favorites/favorites_bloc.dart';
-import 'package:carros/widget/text_error.dart';
+import 'package:carros/pages/favorites/favorites_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
@@ -11,9 +11,6 @@ class FavoritesPage extends StatefulWidget {
 
 class _FavoritesPageState extends State<FavoritesPage>
     with AutomaticKeepAliveClientMixin<FavoritesPage> {
-
-  final _bloc = FavoritesBloc();
-
   @override
   bool get wantKeepAlive => true;
 
@@ -21,44 +18,34 @@ class _FavoritesPageState extends State<FavoritesPage>
   void initState() {
     super.initState();
 
-    _bloc.fetch();
+    FavoritesModel model = Provider.of<FavoritesModel>(context, listen: false);
+    model.getCars();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return StreamBuilder(
-      stream: _bloc.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return TextError("Não foi possível buscar carros");
-        }
+    FavoritesModel model = Provider.of<FavoritesModel>(context);
 
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    List<Car> cars = model.cars;
 
-        List<Car> cars = snapshot.data;
+    if (cars.isEmpty) {
+      return Center(
+        child: Text(
+          "Nenhum carro nos favoritos",
+          style: TextStyle(fontSize: 20),
+        ),
+      );
+    }
 
-        return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: CarsListView(cars),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: CarsListView(cars),
     );
   }
 
   Future<void> _onRefresh() {
-    return _bloc.fetch();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _bloc.dispose();
+    return Provider.of<FavoritesModel>(context, listen: false).getCars();
   }
 }

@@ -1,11 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/pages/cars/car.dart';
 import 'package:carros/pages/cars/car_form_page.dart';
 import 'package:carros/pages/cars/loripsum.dart';
+import 'package:carros/pages/cars/map_page.dart';
 import 'package:carros/pages/favorites/favorite_service.dart';
+import 'package:carros/utils/alert.dart';
+import 'package:carros/utils/event_bus.dart';
 import 'package:carros/utils/nav.dart';
+import 'package:carros/widget/app_image.dart';
 import 'package:carros/widget/text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../api_response.dart';
+import 'car_api.dart';
 
 class CarPage extends StatefulWidget {
   Car car;
@@ -48,7 +55,7 @@ class _CarPageState extends State<CarPage> {
           ),
           IconButton(
             icon: Icon(Icons.videocam),
-            onPressed: _onClickVideo,
+            onPressed: () => _onClickVideo(context),
           ),
           PopupMenuButton<String>(
             onSelected: _onClickPopupMenu,
@@ -80,7 +87,9 @@ class _CarPageState extends State<CarPage> {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
-          CachedNetworkImage(imageUrl: car.urlPhoto),
+          AppImage(
+            car.urlPhoto,
+          ),
           _bloc1(),
           Divider(),
           _bloc2(),
@@ -145,9 +154,22 @@ class _CarPageState extends State<CarPage> {
     );
   }
 
-  void _onClickMap() {}
+  void _onClickMap() {
+    if (car.latitude != null && car.longitude != null) {
+      push(context, MapPage(car));
+    } else {
+      alert(context, "Este carro não possui nenhuma lat/long");
+    }
+  }
 
-  void _onClickVideo() {}
+  void _onClickVideo(context) {
+    if (car.urlVideo != null && car.urlVideo.isNotEmpty) {
+      launch(car.urlVideo);
+//      push(context, VideoPage(car));
+    } else {
+      alert(context, "Este carro não possui nenhum vídeo");
+    }
+  }
 
   _onClickPopupMenu(value) {
     switch (value) {
@@ -155,7 +177,7 @@ class _CarPageState extends State<CarPage> {
         push(context, CarFormPage(car: car));
         break;
       case "delete":
-        print("Apagar");
+        deleteCar();
         break;
       case "share":
         print("Compartilhar");
@@ -164,7 +186,7 @@ class _CarPageState extends State<CarPage> {
   }
 
   void _onClickFovorite() async {
-    bool isFavorite = await FavoriteService.favorite(car);
+    bool isFavorite = await FavoriteService.favorite(context, car);
 
     setState(() {
       color = isFavorite ? Colors.red : Colors.grey;
@@ -172,6 +194,20 @@ class _CarPageState extends State<CarPage> {
   }
 
   void _onClickShare() {}
+
+  void deleteCar() async {
+    ApiResponse<bool> response = await CarApi.delete(car);
+
+    if (response.ok) {
+      alert(context, "Carro deletado com sucesso", callback: () {
+        EventBus.get(context).sendEvent(CarEvent("Carro excluido", car.type));
+
+        Navigator.pop(context);
+      });
+    } else {
+      alert(context, response.msg);
+    }
+  }
 
   @override
   void dispose() {

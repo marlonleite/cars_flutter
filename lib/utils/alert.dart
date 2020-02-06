@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-alert(BuildContext context, String msg) {
+alert(BuildContext context, String msg, {Function callback}) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -9,12 +9,15 @@ alert(BuildContext context, String msg) {
         onWillPop: () async => false,
         child: AlertDialog(
           title: Text("Carros"),
-          content: Text(msg ),
+          content: Text(msg),
           actions: <Widget>[
             FlatButton(
               child: Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
+                if(callback != null) {
+                  callback();
+                }
               },
             )
           ],

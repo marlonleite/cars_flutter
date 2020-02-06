@@ -31,6 +31,14 @@ class AppText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _inputBorder(noBorder) {
+      return noBorder
+          ? UnderlineInputBorder()
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            );
+    }
+
     return TextFormField(
       controller: controller,
       obscureText: password,
@@ -48,9 +56,8 @@ class AppText extends StatelessWidget {
         color: colorText,
       ),
       decoration: InputDecoration(
-          border: noBorder ? InputBorder.none : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          border: _inputBorder(noBorder),
+          disabledBorder: InputBorder.none,
           labelText: label,
           labelStyle: TextStyle(
             fontSize: 25,

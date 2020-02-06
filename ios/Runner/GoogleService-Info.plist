@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>925535139011-n45lu076jq7rn34gp09m6q3rm8nlbmbt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.925535139011-n45lu076jq7rn34gp09m6q3rm8nlbmbt</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>925535139011-56u6dlo15q1f7bf4849n1ppp30hb50ag.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPP91woweaDCKWti7n8U0o_cj39ymIEXU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>925535139011</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>flutter.exemple.com.carros</string>
+	<key>PROJECT_ID</key>
+	<string>cars-f8178</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cars-f8178.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:925535139011:ios:2e2001f70fc118cb19de76</string>
+	<key>DATABASE_URL</key>
+	<string>https://cars-f8178.firebaseio.com</string>
+</dict>
+</plist>

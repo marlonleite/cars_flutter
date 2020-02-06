@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:carros/pages/cars/car.dart';
 import 'package:carros/pages/cars/cars_bloc.dart';
 import 'package:carros/pages/cars/cars_listview.dart';
+import 'package:carros/utils/event_bus.dart';
 import 'package:carros/widget/text_error.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +20,8 @@ class _CarsPageState extends State<CarsPage>
     with AutomaticKeepAliveClientMixin<CarsPage> {
   List<Car> cars;
 
+  StreamSubscription<Event> subscription;
+
   String get type => widget.type;
 
   final _bloc = CarsBloc();
@@ -29,13 +34,22 @@ class _CarsPageState extends State<CarsPage>
     super.initState();
 
     _bloc.fetch(type);
+
+    final bus = EventBus.get(context);
+    subscription = bus.stream.listen((Event e) {
+      print("Event $e");
+      CarEvent carEvent = e;
+      if (carEvent.type == type) {
+        _bloc.fetch(type);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    print("CarsListView build ${type}");
+    print("CarsListView build $type");
 
     return StreamBuilder(
       stream: _bloc.stream,
@@ -69,7 +83,6 @@ class _CarsPageState extends State<CarsPage>
     super.dispose();
 
     _bloc.dispose();
+    subscription.cancel();
   }
-
-
 }
